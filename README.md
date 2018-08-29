@@ -1,6 +1,6 @@
 # Booru-Parser
 Simple Booru Parser
-This parser can parse follow cites:
+Simple Booru Parser This parser can parse following sites:
 1. https://danbooru.donmai.us (Can API)
 2. http://gelbooru.com (Can API)
 3. http://konachan.com (Can API)
