@@ -18,9 +18,10 @@ namespace Booru_Parser
             InitializeComponent();
         }
         Booru booru;
-
+        List<Picture> storage = new List<Picture>();
         void fillList(List<Picture> pic_list)
         {
+            storage = pic_list;
             foreach (var item in pic_list)
             {
                 if (item.url != "")
@@ -96,17 +97,32 @@ namespace Booru_Parser
         private void listView1_Click(object sender, EventArgs e)
         {
             pictureBox1.ImageLocation = listView1.Items[listView1.SelectedItems[0].Index].Text;
+            Picture pic = null;
+            foreach(var item in storage)
+            {
+                if (item.url == pictureBox1.ImageLocation)
+                {
+                    pic = item;
+                    break;
+                }
+            }
+            richTextBox1.Text = string.Format("{0}\nArtist: {1}\nSource: {2}", pic.url, pic.artist, pic.source);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void goPage(int page)
         {
             listView1.Items.Clear();
             if (booru.current_page <= booru.total_page)
             {
-                booru.current_page++;
+                booru.current_page = page;
                 fillList(booru.getPics());
                 label3.Text = "Current page: " + booru.current_page;
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            goPage(++booru.current_page);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -141,6 +157,17 @@ namespace Booru_Parser
                 new WebClient().DownloadFile(pictureBox1.ImageLocation, saveFileDialog1.FileName);
             }
             saveFileDialog1.FileName = "";
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            int page;
+            if (int.TryParse(textBox3.Text, out page))  goPage(Convert.ToInt32(textBox3.Text));
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            goPage(--booru.current_page);
         }
     }
 }
