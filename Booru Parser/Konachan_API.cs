@@ -26,9 +26,9 @@ namespace Booru_Parser
             }
         }
 
-        public override List<string> getPics()
+        public override List<Picture> getPics()
         {
-            List<string> pic_list = new List<string>();
+            List<Picture> pic_list = new List<Picture>();
             XmlDocument xml_page = new XmlDocument();
             xml_page.LoadXml(getPage());  // получение xml документа
             XmlElement root = xml_page.DocumentElement; 
@@ -38,7 +38,7 @@ namespace Booru_Parser
                 {
                     if (child.Name == "file_url") // если содержится аттрибут
                     {
-                        pic_list.Add(child.InnerText);
+                        pic_list.Add(new Picture(child.InnerText, "", "", null));
                     }
                 }
             }

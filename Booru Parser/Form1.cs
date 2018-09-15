@@ -19,13 +19,13 @@ namespace Booru_Parser
         }
         Booru booru;
 
-        void fillList(List<string> pic_list)
+        void fillList(List<Picture> pic_list)
         {
-            foreach (var i in pic_list)
+            foreach (var item in pic_list)
             {
-                if (i != "")
+                if (item.url != "")
                 {
-                    listView1.Items.Add(new ListViewItem(new string[] { i, (listView1.Items.Count + 1).ToString() }));
+                    listView1.Items.Add(new ListViewItem(new string[] { item.url, (listView1.Items.Count + 1).ToString() }));
                     listView1.Items[listView1.Items.Count-1].Checked = true;
                 }
 
@@ -85,7 +85,7 @@ namespace Booru_Parser
                 }
                 else
                 {
-                    fillList(booru.getAll(new List<string>()));
+                    fillList(booru.getAll());
                 }
                 label2.Text = "Total page: " + booru.total_page;
                 label3.Text = "Current page: " + booru.current_page;

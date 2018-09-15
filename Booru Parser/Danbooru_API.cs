@@ -35,9 +35,9 @@ namespace Booru_Parser
             }
         }
 
-        public override List<string> getPics() // переопределение метода на получение листа ссылок
+        public override List<Picture> getPics() // переопределение метода на получение листа ссылок
         {
-            List<string> pic_list = new List<string>();
+            List<Picture> pic_list = new List<Picture>();
             XmlDocument xml_page = new XmlDocument();
             xml_page.LoadXml(getPage()); // скачивание xml файла 
             XmlElement root = xml_page.DocumentElement; 
@@ -49,7 +49,7 @@ namespace Booru_Parser
                     {
                         if (child.Name == "file-url") // если совпадает имя
                         {
-                            pic_list.Add(child.InnerText.Replace("https", "http")); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
+                            pic_list.Add(new Picture(child.InnerText.Replace("https", "http"), "", "", null)); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
                         }
                     }
                 }

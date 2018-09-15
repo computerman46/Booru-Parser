@@ -34,16 +34,16 @@ namespace Booru_Parser
             }
             set { url = value; }
         }
-        public virtual List<string> getAll(List<string> pics = null) // рекурсивный метод на получение всех ссылок, для большенства подходит, но для некотрых нужно переопределние, потому он виртуальный 
+        public virtual List<Picture> getAll(List<Picture> pics = null) // рекурсивный метод на получение всех ссылок, для большенства подходит, но для некотрых нужно переопределние, потому он виртуальный 
         {
-            List<string> pic_list = new List<string>(); // создаем лист
+            List<Picture> pic_list = new List<Picture>(); // создаем лист
             pic_list = getPics(); // парсим первую партию картинок
             current_page++; // переходим на следующую страницу
             while (total_page >= current_page) // цикл идет пока  не дойдет до границы
             {
                 foreach (var i in getAll(pic_list)) // сама рекурсия, вызываем метод и получаем с него лист с ссылками
                 {
-                    pic_list.Add(i.Replace("https", "http")); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
+                    pic_list.Add(i); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
                 }
             }
             return pic_list;
@@ -61,8 +61,8 @@ namespace Booru_Parser
             return "";
         }
 
-        public virtual List<string> getPics() // виртуальный метод для получения листа с ссылками, так как почти у каждного он отличается, он не определен
-        { return new List<string>(); }
+        public virtual List<Picture> getPics() // виртуальный метод для получения листа с ссылками, так как почти у каждного он отличается, он не определен
+        { return new List<Picture>(); }
 
        
 

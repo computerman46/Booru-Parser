@@ -32,9 +32,9 @@ namespace Booru_Parser
             }
         }
 
-        public override List<string> getPics() // переопределение метода на получение листа ссылок
+        public override List<Picture> getPics() // переопределение метода на получение листа ссылок
         {
-            List<string> pic_list = new List<string>();
+            List<Picture> pic_list = new List<Picture>();
             string html_0 = "<ul id=" + '"' + "thumbs2"; // html теги, записаны в переменные для удобности и читаемости
             string html_1 = "<a href=" + '"' + 'h';
             string page = getPage();
@@ -47,8 +47,8 @@ namespace Booru_Parser
             while (page.Contains(html_1))
             {
                 string buff = page.Substring(page.IndexOf(html_1) + html_1.Count() - 1);
-                pic_list.Add(buff.Substring(0, buff.IndexOf('"')));
-                page = page.Substring(page.IndexOf(pic_list[pic_list.Count - 1]));
+                pic_list.Add(new Picture(buff.Substring(0, buff.IndexOf('"')),"","", null));
+                page = page.Substring(page.IndexOf(pic_list[pic_list.Count - 1].url));
             }
             return pic_list;
         }

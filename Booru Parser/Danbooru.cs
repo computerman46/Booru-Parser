@@ -47,9 +47,9 @@ namespace Booru_Parser
 
 
 
-        public override List<string> getPics() // переопределение метода на получение листа ссылок
+        public override List<Picture> getPics() // переопределение метода на получение листа ссылок
         {
-            List<string> pic_list = new List<string>();
+            List<Picture> pic_list = new List<Picture>();
             string html_0 = "data-file-url=" + '"'; // html код
             string _site_code = getPage();
             while (_site_code.Contains(html_0)) // пока страница содержит html код
@@ -59,7 +59,8 @@ namespace Booru_Parser
                 buffer = _site_code.Substring(html_0.Count() + _site_code.IndexOf(html_0)); // убираем все до ссылки на файл
                 index = buffer.IndexOf('"');
                 _site_code = buffer.Substring(index);
-                pic_list.Add(buffer.Substring(0, buffer.IndexOf('"')).Replace("https", "http")); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
+               // pic_list.Add(buffer.Substring(0, buffer.IndexOf('"')).Replace("https", "http")); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
+               pic_list.Add(new Picture(buffer.Substring(0, buffer.IndexOf('"')).Replace("https", "http"), "", "" , null)); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
             }
             return pic_list;
         }

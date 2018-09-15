@@ -36,23 +36,28 @@ namespace Booru_Parser
             return current_page * 42;
         }
 
-        List<string> loopPic(int min, int max) // так как получение одной страницы и всех картинок разом похожи, они были объедены в общий метод 
+        List<Picture> loopPic(int min, int max) // так как получение одной страницы и всех картинок разом похожи, они были объедены в общий метод 
         {                                      // который вызывается по двум параметрам
-            List<string> pic_list = new List<string>();
+            List<Picture> pic_list = new List<Picture>();
             for (int i = min; i < max; i++)
             {
                 string _url = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=" + Tag + "&pid=" + i + "&limit=1";
                 XmlDocument xml_page = new XmlDocument();
                 xml_page.LoadXml(new WebClient().DownloadString(_url));
-                if (xml_page.DocumentElement.LastChild != null) pic_list.Add(xml_page.DocumentElement.LastChild.Attributes[2].Value);
+                if (xml_page.DocumentElement.LastChild != null)
+                {
+                    pic_list.Add(new Picture(xml_page.DocumentElement.LastChild.Attributes[2].Value, "", "", null));
+                }
+                   
             }
             return pic_list;
         }
-        public override List<string> getAll(List<string> pics)
+
+        public override List<Picture> getAll(List<Picture> pics = null)
         {
             return loopPic(0, total_pics);
         }
-        public override List<string> getPics()
+        public override List<Picture> getPics()
         {
             getMin min = () =>
             {

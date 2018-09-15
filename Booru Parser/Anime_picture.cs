@@ -35,9 +35,9 @@ namespace Booru_Parser
             }
         }
 
-        public override List<string> getPics() // переопределение метода на получение листа ссылок
+        public override List<Picture> getPics() // переопределение метода на получение листа ссылок
         {
-            List<string> pic_list = new List<string>();
+            List<Picture> pic_list = new List<Picture>();
             string html_0 = "data-pubtime"; // html теги, записаны в переменные для удобности и читаемости
             string html_1 = "<a href=" + '"';
             string html_2 = "posts_block";
@@ -49,19 +49,18 @@ namespace Booru_Parser
             {
                 string buff = page.Substring(page.IndexOf(html_1) + html_1.Count());
                 buff = buff.Substring(0, buff.IndexOf('"'));
-                if (buff.Contains("by_tag")) pic_list.Add(html_4 + buff);
+                if (buff.Contains("by_tag")) pic_list.Add(new Picture((html_4 + buff), "","", null));
                 page = page.Substring(page.IndexOf(buff));
             }
             for (int i = 0; i < pic_list.Count; i++)
             {
-                page = new WebClient().DownloadString(pic_list[i]);
+                page = new WebClient().DownloadString(pic_list[i].url);
                 if (page.Contains(html_3) == false) // такое может случается если картинка +18
                 {
-                    pic_list[i] = "";
                     continue;
                 }
                 page = page.Substring(page.IndexOf(html_3));
-                pic_list[i] = (html_4 + page.Substring(0, page.IndexOf('"'))); 
+                pic_list[i] = new Picture((html_4 + page.Substring(0, page.IndexOf('"'))), "", "", null); 
             }
             return pic_list;
         }
