@@ -112,7 +112,7 @@ namespace Booru_Parser
         private void goPage(int page)
         {
             listView1.Items.Clear();
-            if (booru.current_page <= booru.total_page)
+            if (page > 0)
             {
                 booru.current_page = page;
                 fillList(booru.getPics());

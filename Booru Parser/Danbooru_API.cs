@@ -12,7 +12,7 @@ namespace Booru_Parser
     {
         public Danbooru_API(string _tag): base(_tag)
         {
-            while (true)
+           /* while (true)
             {
                 if (getPics().Count > 0) // так как API Danbooru не предоставляет информации о страницах или о общем количестве 
                 {                        // доступных(некоторые картинки доступны с премиум аккаунтом) или хотя бы всего картинок
@@ -24,7 +24,7 @@ namespace Booru_Parser
                     current_page = 1;
                     break;
                 }
-            }
+            }*/
         }
         public override string Url
         {
@@ -38,6 +38,7 @@ namespace Booru_Parser
         public override List<Picture> getPics() // переопределение метода на получение листа ссылок
         {
             List<Picture> pic_list = new List<Picture>();
+            
             XmlDocument xml_page = new XmlDocument();
             xml_page.LoadXml(getPage()); // скачивание xml файла 
             XmlElement root = xml_page.DocumentElement; 
@@ -45,13 +46,43 @@ namespace Booru_Parser
             {
                 foreach (XmlNode node in root) // просмотр всех элементов xml файла
                 {
+                    string url = "";
+                    string artist = "";
+                    string source = "";
+                    List<string> tags = new List<string>();
                     foreach (XmlNode child in node.ChildNodes) // просмотр элементов элементов 
                     {
+                        
                         if (child.Name == "file-url") // если совпадает имя
                         {
-                            pic_list.Add(new Picture(child.InnerText.Replace("https", "http"), "", "", null)); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
+                            url = child.InnerText.Replace("https", "http"); // так как могут быть проблемы с защищеным соединением, то нужна замена https на http
+                        }
+                        if (child.Name == "tag-string-artist")
+                        {
+                            artist = child.InnerText;
+                        }
+                        if (child.Name == "source")
+                        {
+                            source = child.InnerText;
+                        }
+                        if (child.Name == "tag-string")
+                        {
+                            string tag = "";
+                            foreach (var charter in child.InnerText)
+                            {
+                                if (charter != ' ')
+                                {
+                                    tag += charter;
+                                }
+                                else
+                                {
+                                    tags.Add(tag);
+                                    tag = "";
+                                }
+                            }
                         }
                     }
+                    pic_list.Add(new Picture(url, artist, source, tags));
                 }
             }
             else  if(current_page == 1 )error = true; // если нет элементов и сейчас только первая страница то ошибка
