@@ -102,6 +102,7 @@ namespace Booru_Parser
             {
                 if (item.url == pictureBox1.ImageLocation)
                 {
+                    label5.Text = (listView1.SelectedItems[0].Index + 1).ToString();
                     pic = item;
                     break;
                 }
